@@ -15,7 +15,8 @@ INSERT INTO Album (name, release_year)
 VALUES 
 ('Name_Album_1', 2019), 
 ('Name_Album_2', 1971), 
-('Name_Album_3', 2020);
+('Name_Album_3', 2020),
+('Name_Album_4', 1972);
 
 INSERT INTO Collection (name, release_year) 
 VALUES 
@@ -27,20 +28,29 @@ VALUES
 
 INSERT INTO Track (album_id, name, duration) 
 VALUES 
-(1, 'Name_Track_1', 120), 
-(1, 'Name_my_Track_2', 125),
-(1, 'Name_Track_7', 230),
-(2, 'Name_my_Track_3', 130),
-(2, 'Name_Track_4', 125),
-(3, 'Name_Track_5', 135),
-(3, 'Name_мой_Track_6', 140),
-(3, 'Name_Track_8', 240),
-(3, 'Name_Track_9', 120);
+(1, 'Name my', 120), 
+(1, 'my Name', 125),
+(1, 'by myself', 121),
+(1, 'bemy self', 122),
+(1, 'myself by', 123),
+(1, 'by myself by', 124),
+(1, 'beemy', 126),
+(1, 'premyne', 127),
+(1, 'my', 230),
+(2, 'Name my Track', 130),
+(2, 'Name мой', 125),
+(3, 'мой Name', 135),
+(3, 'мой', 140),
+(3, 'Name мой Track', 240),
+(3, 'myself', 120),
+(4, 'Track_4_1', 136),
+(4, 'Track_4_2', 139);
 
 INSERT INTO Artist_Album (artist_id, album_id) 
 VALUES 
 (1, 1), 
 (2, 2),
+(2, 3),
 (3, 3),
 (4, 3);
 
