@@ -19,7 +19,7 @@ ORDER BY name;
 
 SELECT name 
 FROM Track
-WHERE name LIKE '%мой%' OR name LIKE '%my%'
+WHERE STRING_TO_ARRAY(LOWER(name), ' ') && ARRAY['мой', 'my']
 ORDER BY name;
 
 SELECT GE.name, COUNT(AG.genre_id) 
@@ -36,10 +36,14 @@ FROM Track AS TR JOIN Album AS AL ON TR.album_id = AL.album_id
 GROUP BY AL.name
 ORDER BY AL.name;
 
-SELECT AR.name 
-FROM Artist_Album AS AA JOIN Artist AS AR ON AA.artist_id = AR.artist_id
-						JOIN Album AS AL ON AA.album_id = AL.album_id
-WHERE AL.release_year != 2020
+SELECT AR.name
+FROM Artist AS AR
+WHERE AR.name NOT IN (
+	SELECT AR.name 
+	FROM Artist_Album AS AA JOIN Artist AS AR ON AA.artist_id = AR.artist_id
+							JOIN Album AS AL ON AA.album_id = AL.album_id
+	WHERE AL.release_year = 2020
+)	
 GROUP BY AR.name
 ORDER BY AR.name;
 
@@ -53,12 +57,11 @@ WHERE AR.name = 'Artist_1'
 GROUP BY CO.name
 ORDER BY CO.name;
 
-SELECT AL.name 
-FROM Artist_Genre AS AG JOIN Genre AS GE ON AG.genre_id = GE.genre_id 
-						JOIN Artist AS AR ON AG.artist_id = AR.artist_id
-						JOIN Artist_Album AS AA ON AG.artist_id = AA.artist_id
-						JOIN Album AS AL ON AA.album_id = AL.album_id
-GROUP BY AL.name
+SELECT DISTINCT AL.name 
+FROM Album AS AL JOIN Artist_Album AS AA ON AL.album_id = AA.album_id
+				 JOIN Artist AS AR ON AA.artist_id = AR.artist_id
+				 JOIN Artist_Genre AS AG ON AA.artist_id = AG.artist_id
+GROUP BY AL.name, AG.artist_id
 HAVING COUNT(AG.genre_id) > 1
 ORDER BY AL.name;
 
@@ -77,6 +80,12 @@ ORDER BY AR.name;
 
 SELECT AL.name 
 FROM Album AS AL JOIN Track AS TR ON AL.album_id = TR.album_id 
-GROUP BY TR.album_id, AL.name
-ORDER BY COUNT(*) 
-LIMIT 1;
+GROUP BY AL.album_id
+HAVING COUNT(*) = (
+	SELECT COUNT(TR.track_id)
+	FROM Track AS TR
+	GROUP BY TR.album_id
+	ORDER BY 1
+	LIMIT 1
+)
+ORDER BY AL.name;
